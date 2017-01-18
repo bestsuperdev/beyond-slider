@@ -31,6 +31,7 @@ next={<span>&gt;</span>}>
 |  width  | Number/String |  100%   |  设置 Slider 宽度  |
 |  height  | Number/String |  100%   |  设置 Slider 高度  |
 |  interval  | Number/String |  3  |  设置轮播的时间间隔,单位为秒  |
+|  autoPlay  | Boolean |  true  |  是否开启自动轮播  |
 |  pauseOnAction  | Boolean |  false  |  设置鼠标悬停时是否停止轮播  |
 |  controlNav  | Boolean |  false   |  显示 Slider 上的指示器  |
 |  prev  | Element/String |  -   |  设置前指示器内容  |

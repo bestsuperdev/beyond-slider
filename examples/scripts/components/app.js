@@ -29,7 +29,7 @@ class App extends React.Component {
 
 		return (
 			<div className='app'>
-				<Slider controlNav width="100%" height="500" pauseOnAction interval={3}>
+				<Slider controlNav width="100%" height="500" autoPlay={false} pauseOnAction interval={3}>
 					{imgArr.map((img, i) => <Item key={i} link={img.link} src={img.url}/>)}
 				</Slider>
 			</div>

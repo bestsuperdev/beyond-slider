@@ -25,7 +25,8 @@ const Slider = React.createClass({
     getDefaultProps() {
         return {
             interval: 2,
-            height: 20
+            autoPlay: true,
+            height: 20,
         }
     },
 
@@ -39,11 +40,21 @@ const Slider = React.createClass({
 
     componentDidMount() {
         let {curIndex} = this.state;
-        this.autoChange = this.setSliderInterval(curIndex);
+        let {autoPlay} = this.props;
+
+        if (autoPlay) {
+            this.autoChange = this.setSliderInterval(curIndex);
+        }
     },
 
     // 设置定时器
     setSliderInterval(curIndex) {
+        let {autoPlay} = this.props;
+
+        if (!autoPlay || autoPlay === 'false') {
+            return;
+        }
+
         let {imgLen} = this.state;
         let {interval} = this.props;
 
@@ -59,8 +70,17 @@ const Slider = React.createClass({
         }, interval);
     },
 
-    handlerIndexOver(curIndex) {
+    clearSliderInterval() {
+        let {autoPlay} = this.props;
+
+        if (!autoPlay || autoPlay === 'false') {
+            return;
+        }
         clearInterval(this.autoChange);
+    },
+
+    handlerIndexOver(curIndex) {
+        this.clearSliderInterval();
         this.changeTo(curIndex);
     },
 
@@ -69,7 +89,7 @@ const Slider = React.createClass({
     },
 
     handlerIndexClick(curIndex) {
-        clearInterval(this.autoChange);
+        this.clearSliderInterval();
         this.changeTo(curIndex);
         this.autoChange = this.setSliderInterval(curIndex);
     },
@@ -147,12 +167,12 @@ const Slider = React.createClass({
                     })
             )
         });
-        return <ul ref="sliderList" className="slider-list">{children}</ul>
+        return <ul ref="sliderList" className={`slider-list`}>{children}</ul>
     },
 
     renderSliderIndex() {
         let {imgLen, curIndex} = this.state;
-        let {controlNav, width, height} = this.props;
+        let {controlNav} = this.props;
         let indexArr = [];
         for (let i = 0; i < imgLen; i++) {
             let index = (
@@ -164,7 +184,7 @@ const Slider = React.createClass({
             );
             indexArr.push(index);
         }
-        return controlNav && <ul className="index-list" style={{width: width, height: height}}>{indexArr}</ul>
+        return controlNav && <ul className="index-list" >{indexArr}</ul>
     }
 
 });
