@@ -2,6 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var es3ifyPlugin = require('es3ify-webpack-plugin')
 // var autoprefixer = require('autoprefixer');
 // var precss = require('precss');
 // var cssgrace = require('cssgrace');
@@ -19,35 +20,55 @@ module.exports = {
         chunkFilename: "[id].chunk.js"
     },
     module: {
-        loaders: [
-            { test : /\.css$/,  loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader')},
-            { test : /\.less$/, loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader!less-loader')},
-            { test : /\.jsx?$/, loader : 'babel' , exclude: /(node_modules|bower_components)/},
-            // { test : /\.jsx?$/ , loader : 'babel-loader' , query:{ presets : ['es2015','react'] } , exclude: /(node_modules|bower_components)/},
-            //如果不超过30000/1024kb,那么就直接采用dataUrl的形式,超过则返回链接,图片会复制到dist目录下
-            { test: /\.(png|jpg|jpeg|gif)$/, loader: "url-loader?limit=30000" },
-            { test: /\.(svg|ttf|eot|svg|woff(\(?2\)?)?)(\?[a-zA-Z_0-9.=&]*)?(#[a-zA-Z_0-9.=&]*)?$/, loader : "file-loader"}
-        ]
+        rules : [
+			{test : /\.less$/, use : ExtractTextPlugin.extract({
+				fallback : 'style-loader',
+				use : ['css-loader',{loader : 'postcss-loader', options : {
+					plugins : function(){
+						return [ require('autoprefixer')]
+					}
+				}},'less-loader'],
+				publicPath : ''
+			})},
+			{test : /\.css$/, use : ExtractTextPlugin.extract({
+				fallback : 'style-loader',
+				use : 'css-loader',
+				publicPath : ''
+			})},
+			{test : /\.jsx?$/, loader : 'babel-loader' , exclude: /node_modules/},
+			{test: /\.(png|jpg|jpeg|gif)$/, use:[{loader : 'url-loader', options : {limit : 30000}}]},
+			{test: /\.(svg|ttf|eot|svg|woff(\(?2\)?)?)(\?[a-zA-Z_0-9.=&]*)?(#[a-zA-Z_0-9.=&]*)?$/, loader : 'file-loader'}
+		]
     },
 
     resolve : {
-        root : path.resolve('./')
+        modules: [path.join(__dirname),"node_modules"]
+        // root : path.resolve('./')
     },
+    externals : {
+		'react' : 'React',
+		'react-dom' : 'ReactDOM'
+	},
 
-    postcss: function () {
-        return [require('autoprefixer') , require('postcss-clearfix')];
-    },
-    plugins : [ 
+    // postcss: function () {
+    //     return [require('autoprefixer') , require('postcss-clearfix')];
+    // },
+    plugins : [
+        new es3ifyPlugin(), 
         new webpack.DefinePlugin({
            "process.env" : {
                 NODE_ENV : JSON.stringify("production")
             }
         }),
-        new ExtractTextPlugin("[name].bundle.css",{allChunks: true}),
-        new webpack.optimize.CommonsChunkPlugin("commons", "[name].bundle.js"),
+        new ExtractTextPlugin({
+			filename : '[name].[chunkhash].bundle.css',
+			allChunks : true,
+			disable : false
+		}),
+        // new webpack.optimize.CommonsChunkPlugin("commons", "[name].bundle.js"),
         // new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
-            template : 'examples/index.html',
+            template : path.join(__dirname,'./examples/dist.html'),
             inject: true
             // filename: '../index.html',
         })

@@ -1,100 +1,103 @@
-.slider-wrapper {
+@font-face {font-family: "beyond-slider-iconfont";
+  src: url('../fonts/iconfont.eot?t=1489057512185'); /* IE9*/
+  src: url('../fonts/iconfont.eot?t=1489057512185#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/iconfont.woff?t=1489057512185') format('woff'), /* chrome, firefox */
+  url('../fonts/iconfont.ttf?t=1489057512185') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../fonts/iconfont.svg?t=1489057512185#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.beyond-slider-back,.beyond-slider-next {
+  font-family:"beyond-slider-iconfont" !important;
+  font-size:30px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.beyond-slider-back:before { content: "\e697"; }
+
+.beyond-slider-next:before { content: "\e6a7"; }
+
+
+
+
+.beyond-slider {
     position: relative;
     background: #f5f5f5;
     border: none;
     width: 100%;
     height: 100%;
 
-    .slider-list {
-        height: 100%;
-        zoom: 1;
-        z-index: 10;
+    &>&-items {
+        // height: 100%;
         overflow: hidden;
-
-        & > li > a {
-            display: block;
-            height: 100%;
-        }
-
-        & > li > a > img{
-            width: 100%;
-            height: 100%;
-        }
-
-        & > li {
-            width: 100%;
-            height:100%;
-            float: left;
-            position: absolute;
-            z-index: 1;
-            transition: opacity 1s ease-in-out;
-            opacity:0;
-        }
-
-        & > li.fadeIn {
-            z-index: 2;
-            opacity: 100;
-        }
-
-        & > li > .inner-html {
-            position: absolute;
-            top:0;
-            left:0;
-        }
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
-    .index-list {
+    &>&-items>li{
+
+        width: 100%;
+        height:100%;
+        left: 0;
+        right: 0;
+        position: absolute;
+        z-index: 1;
+        transition: opacity 1s ease-in-out;
+        opacity:0;
+    }
+    &>&-items>&-fadeIn{
+        z-index: 2;
+        opacity: 1;
+    }
+
+    &>&-index {
         width: 100%;
         position: absolute;
         left: 0;
-        top:80%;
-        z-index: 5;
+        bottom: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        // top:80%;
+        z-index: 3;
         text-align: center;
-
-        & > li{
-            box-shadow: none;
-            cursor: pointer;
-            display: inline-block;
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            border : 1px solid #0acc58;
-            margin: 0 9px;
-            background-color: transparent;
-        }
-
-        & > li.index-on, li:hover {
-            background-color: white;
-            border-color: white;
-        }
-
+    }
+    &>&-index>li{
+        box-shadow: none;
+        cursor: pointer;
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        border : 1px solid #0acc58;
+        margin: 0 9px;
+        background-color: transparent;
+    }
+    &>&-index>&-active,&>&-index>li:hover{
+        background-color: white;
+        border-color: white;
     }
 
-    .direction-nav {
-        & & > .slider-prev {
-            left: 0;
-        }
-
-        & & > .slider-next {
-            right: 0;
-        }
-
-        & & > a {
-            opacity: 1;
-            width: 58px;
-            height: 58px;
-            line-height: 58px;
-            margin-top: -29px;
-            background-color: #1a1a1a;
-            text-decoration: none;
-            display: block;
-            position: absolute;
-            top: 50%;
-            z-index: 10;
-            overflow: hidden;
-            color: white;
-            font-size: 18px;
-            text-align: center;
-        }
+    &>&-direction-navs>&-direction-prev,&>&-direction-navs>&-direction-next{
+        opacity: 1;
+        width: 58px;
+        height: 58px;
+        line-height: 58px;
+        margin-top: -29px;
+        background-color: rgba(0, 0, 0, .8);// #1a1a1a;
+        position: absolute;
+        top: 50%;
+        z-index: 4;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+    }
+    &>&-direction-navs>&-direction-prev{
+        left: 0;
+    }
+    &>&-direction-navs>&-direction-next{
+        right: 0;
     }
 }

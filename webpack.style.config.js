@@ -19,27 +19,46 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test : /\.css$/,  loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader')},
-            { test : /\.less$/, loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader!less-loader')},
+            // { test : /\.css$/,  loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader')},
+            // { test : /\.less$/, loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader!less-loader')},
+            {test : /\.less$/, use : ExtractTextPlugin.extract({
+				fallback : 'style-loader',
+				use : ['css-loader',{loader : 'postcss-loader', options : {
+					plugins : function(){
+						return [ require('autoprefixer')]
+					}
+				}},'less-loader'],
+				publicPath : ''
+			})},
+			{test : /\.css$/, use : ExtractTextPlugin.extract({
+				fallback : 'style-loader',
+				use : 'css-loader',
+				publicPath : ''
+			})},
             { test: /\.(png|jpg|jpeg|gif)$/, loader: "url-loader?limit=30000" },
             { test: /\.(svg|ttf|eot|svg|woff(\(?2\)?)?)(\?[a-zA-Z_0-9.=&]*)?(#[a-zA-Z_0-9.=&]*)?$/, loader : "file-loader"}
         ]
     },
 
     resolve : {
-        root : path.resolve('./')
+        modules: [path.join(__dirname),"node_modules"]
+        // root : path.resolve('./')
     },
 
-    postcss: function () {
-        return [require('autoprefixer') , require('postcss-clearfix')];
-    },
+    // postcss: function () {
+    //     return [require('autoprefixer') , require('postcss-clearfix')];
+    // },
     plugins : [ 
         new webpack.DefinePlugin({
            "process.env" : {
                 NODE_ENV : JSON.stringify("production")
             }
         }),
-        new ExtractTextPlugin("[name].css",{allChunks: true})
+       new ExtractTextPlugin({
+			filename : '[name].css',
+			allChunks : true,
+			disable : false
+		})
     ]
     // debug : true,
     // devtool : 'cheap-module-eval-source-map'

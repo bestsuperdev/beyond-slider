@@ -4,190 +4,167 @@
  </Slider>
  */
 
-const React = require('react');
+const React = require('react')
+const classnames = require('classnames')
+const prefix = 'beyond-slider'
 // const ReactDOM = require('react-dom');
 
-const Item = React.createClass({
 
-    render() {
-        let {link, src, children} = this.props;
-        return (
-            <li {...this.props}>
-                {src && <a href={link || "javascript:;"} target={link ? "_blank" : ""}><img src={src} alt="图片"/></a>}
-                {children && <div className="inner-html">{children}</div>}
-            </li>
-        );
-    }
-});
+const Item = (props)=> <li onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave} className={classnames(props.active && `${prefix}-fadeIn`)}>{props.children}</li>
 
-const Slider = React.createClass({
+class Slider extends React.Component {
+	constructor(props){
+		super(props)
+		this.state = {curIndex: 0}
+		this.autoSlideHandle = null
+		this.handlerItemLeave = this.handlerItemLeave.bind(this) 
+		this.handlerItemEnter = this.handlerItemEnter.bind(this) 
+	}
 
-    getDefaultProps() {
-        return {
-            interval: 2,
-            autoPlay: true,
-            height: 20,
-        }
-    },
+	componentDidMount(){
+		let {autoPlay} = this.props
+		if(autoPlay){
+			this.handlerAutoSlide()
+		}
+	}
 
-    getInitialState() {
-        this.autoChange = null;
-        return {
-            curIndex: 0,
-            imgLen: this.props.children.length
-        }
-    },
+	componentDidUpdate(){
+		this.componentDidMount()
+	}
 
-    componentDidMount() {
-        let {curIndex} = this.state;
-        let {autoPlay} = this.props;
+	getTotalItems(){
+		let {children} = this.props
+		if(children){
+			return  Array.isArray(children) ? children.length : 1
+		}else{
+			return 0 
+		}
+	}
 
-        if (autoPlay) {
-            this.autoChange = this.setSliderInterval(curIndex);
-        }
-    },
+	getNextIndex(){
+		let {curIndex} = this.state
+		let {children} = this.props
+		if(children){
+			curIndex++
+			if(curIndex >= this.getTotalItems()){
+				curIndex = 0
+			}
+		}
+		return curIndex
+	}
 
-    // 设置定时器
-    setSliderInterval(curIndex) {
-        let {autoPlay} = this.props;
+	getPrevIndex(){
+		let {curIndex} = this.state
+		curIndex--
+		if(curIndex < 0){
+			curIndex = Math.max(this.getTotalItems()-1,0)
+		}
+		return curIndex
+	}
 
-        if (!autoPlay || autoPlay === 'false') {
-            return;
-        }
+	handlerStopAutoSlide(){
+		clearTimeout(this.autoSlideHandle)
+		this.autoSlideHandle = null
+	}
 
-        let {imgLen} = this.state;
-        let {interval} = this.props;
+	handlerAutoSlide(){
+		let {interval} = this.props
+		interval = Math.max(interval+1,0) * 1000
+		this.handlerStopAutoSlide()
+		this.autoSlideHandle = setTimeout(()=>{
+			let curIndex = this.getNextIndex()
+			this.setState({curIndex})
+		},interval)
+	}
+	handlerItemEnter(){
+		// console.log('enter')
+		if(this.props.pauseOnAction && this.autoSlideHandle != null){
+			clearTimeout(this.autoSlideHandle)
+			this.autoSlideHandle = null
+		}
+	}
 
-        interval = parseInt(interval) * 1000;
-        return setInterval(() => {
-            if (curIndex < imgLen - 1) {
-                curIndex++;
-            } else {
-                curIndex = 0;
-            }
-            //调用变换处理函数
-            this.changeTo(curIndex);
-        }, interval);
-    },
+	handlerItemLeave(){
+		if(this.props.autoPlay){
+			this.handlerAutoSlide()
+		}
+	}
 
-    clearSliderInterval() {
-        let {autoPlay} = this.props;
+	handlerChange(curIndex){
+		this.handlerStopAutoSlide()
+		this.setState({curIndex})
+	}
 
-        if (!autoPlay || autoPlay === 'false') {
-            return;
-        }
-        clearInterval(this.autoChange);
-    },
+	handlerPrev(){
+		let prev = this.getPrevIndex()
+		this.handlerChange(prev)
+	}
+	handlerNext(){
+		let next = this.getNextIndex()
+		this.handlerChange(next)
+	}
 
-    handlerIndexOver(curIndex) {
-        this.clearSliderInterval();
-        this.changeTo(curIndex);
-    },
 
-    handlerIndexLeave(curIndex) {
-        this.autoChange = this.setSliderInterval(curIndex);
-    },
+	render(){
+		let {width, height, extraClassName} = this.props
+		let style = {width,height}
+		let className = classnames(prefix,extraClassName)
+		return (
+			<div style={style} className={className}>
+				{this.renderItems()}
+				{this.renderIndex()}
+				{this.renderNavs()}
+			</div>
+		)
+	}
 
-    handlerIndexClick(curIndex) {
-        this.clearSliderInterval();
-        this.changeTo(curIndex);
-        this.autoChange = this.setSliderInterval(curIndex);
-    },
+	renderItems(){
+		let {children} = this.props
+		let {curIndex} = this.state
+		if(children){
+			children = Array.isArray(children) ? children : [children]
+			let items = children.map((item,i)=>{
+				return React.cloneElement(item,{
+					active: i == curIndex,
+					onMouseEnter : this.handlerItemEnter,
+					onMouseLeave : this.handlerItemLeave
+				})
+			})
+			
+			return <ul className={`${prefix}-items`}>{items}</ul>
+		}
+	}
+	renderIndex(){
+		let {controlNav} = this.props
+		if(controlNav){
+			let {curIndex} = this.state
+			let totalItems = this.getTotalItems()
+			let indexItems = []
+			for (let i = 0; i < totalItems; i++) {
+				let className = classnames(i == curIndex && `${prefix}-active`)
+				indexItems.push(<li key={i} className={className} onClick={this.handlerChange.bind(this, i)}></li>)
+			}
+			return <ul className={`${prefix}-index`} >{indexItems}</ul>
+		}
+	}
+	renderNavs(){
+		let {directionNav,prev,next} = this.props
+		prev = prev || <i className={`${prefix}-back`}></i>
+		next = next || <i className={`${prefix}-next`}></i>
+		if(directionNav){
+			return (
+				<div className={`${prefix}-direction-navs`}>
+					<span href="#" className={`${prefix}-direction-prev`} onClick={this.handlerPrev.bind(this)}>{prev}</span>
+					<span href="#" className={`${prefix}-direction-next`} onClick={this.handlerNext.bind(this)}>{next}</span>
+				</div>
+			)
+		}
 
-    // 变换处理函数
-    changeTo(curIndex) {
-        if (curIndex == this.state.curIndex) {
-            return;
-        }
-        this.setState((props, state) => ({curIndex}));
-    },
+	}
+}
 
-    handlerClickPrev(event) {
-        event.stopPropagation();
-        let {curIndex, imgLen} = this.state;
 
-        if (curIndex == 0) {
-            curIndex = imgLen - 1;
-        } else {
-            curIndex -= 1;
-        }
-        this.handlerIndexClick(curIndex)
-    },
 
-    handlerClickNext(event) {
-        event.stopPropagation();
-        let {curIndex, imgLen} = this.state;
+export default Slider
 
-        if (curIndex == imgLen - 1) {
-            curIndex = 0;
-        } else {
-            curIndex += 1;
-        }
-        this.handlerIndexClick(curIndex)
-    },
-
-    render() {
-
-        let {width, height, prev, next, extraClassName} = this.props;
-
-        return (
-            <div style={{width: width, height: height}}
-                 className={`slider-wrapper ${extraClassName ? extraClassName : ''}`}>
-                {this.renderSliderItem()}
-                {this.renderSliderIndex()}
-                {(prev || next) &&
-                <div className="direction-nav">
-                    <a href="#"
-                       className={`slider-prev`}
-                       onClick={this.handlerClickPrev}>
-                        {prev}
-                    </a>
-                    <a href="#"
-                       className={`slider-next`}
-                       onClick={this.handlerClickNext}>
-                        {next}
-                    </a>
-                </div>}
-            </div>
-        );
-    },
-
-    renderSliderItem() {
-        let {pauseOnAction} = this.props;
-        let {curIndex} = this.state;
-        let children = (Array.isArray(this.props.children) ? this.props.children : [this.props.children]).filter((child) => child != null);
-        children = children.map((child, i) => {
-            return (
-                React.cloneElement(child,
-                    {
-                        key: i,
-                        onMouseLeave: pauseOnAction && this.handlerIndexLeave.bind(this, curIndex),
-                        onMouseOver: pauseOnAction && this.handlerIndexOver.bind(this, curIndex),
-                        className: i == curIndex ? 'fadeIn' : '',
-                    })
-            )
-        });
-        return <ul ref="sliderList" className={`slider-list`}>{children}</ul>
-    },
-
-    renderSliderIndex() {
-        let {imgLen, curIndex} = this.state;
-        let {controlNav} = this.props;
-        let indexArr = [];
-        for (let i = 0; i < imgLen; i++) {
-            let index = (
-                <li key={i}
-                    className={i == curIndex ? 'index-on' : ''}
-                    onMouseOver={this.handlerIndexOver.bind(this, i)}
-                    onMouseLeave={this.handlerIndexLeave.bind(this, i)}>
-                </li>
-            );
-            indexArr.push(index);
-        }
-        return controlNav && <ul className="index-list" >{indexArr}</ul>
-    }
-
-});
-
-Slider.Item = Item;
-module.exports = Slider;
+export {Item}
