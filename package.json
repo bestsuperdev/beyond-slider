@@ -35,26 +35,15 @@
     "es3ify-webpack-plugin": "0.0.1",
     "eslint": "^1.10.2",
     "eslint-plugin-react": "^3.11.3",
-    "exports-loader": "^0.6.2",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.28.0",
-    "imports-loader": "^0.6.5",
     "json-server": "^0.8.4",
-    "karma": "^0.13.15",
-    "karma-babel-preprocessor": "^6.0.1",
-    "karma-chrome-launcher": "^0.2.2",
-    "karma-firefox-launcher": "^0.1.7",
-    "karma-ie-launcher": "^0.2.0",
-    "karma-jasmine": "^0.3.6",
-    "karma-webpack": "^1.7.0",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
     "opn": "^3.0.3",
     "postcss-clearfix": "^0.2.0",
     "postcss-loader": "^0.8.1",
-    "quick-local-ip": "^1.0.7",
-    "react-hot-loader": "^3.0.0-beta.6",
     "rimraf": "^2.5.2",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
@@ -63,12 +52,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bestsuperdev/react-component-boilerplate.git"
+    "url": "https://github.com/bestsuperdev/beyond-slider.git"
   },
-  "author": "Peng mingze <mingzepeng@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bestsuperdev/react-component-boilerplate/issues"
+    "url": "https://github.com/bestsuperdev/beyond-slider/issues"
   },
-  "homepage": "https://github.com/bestsuperdev/react-component-boilerplate.git"
+  "homepage": "https://github.com/bestsuperdev/beyond-slider.git"
 }

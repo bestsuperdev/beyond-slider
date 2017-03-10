@@ -163,7 +163,13 @@ class Slider extends React.Component {
 	}
 }
 
-
+Slider.defaultProps = {
+	autoPlay : true,
+	pauseOnAction : true,
+	directionNav :true,  
+	controlNav : true,
+	interval : 2
+}
 
 export default Slider
 
