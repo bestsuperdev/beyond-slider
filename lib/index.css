@@ -12,6 +12,7 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: bold;
 }
 .beyond-slider-back:before {
   content: "\E697";
@@ -80,13 +81,17 @@
   height: 58px;
   line-height: 58px;
   margin-top: -29px;
-  background-color: rgba(0, 0, 0, 0.8);
   position: absolute;
   top: 50%;
   z-index: 4;
   color: white;
   text-align: center;
   cursor: pointer;
+  transition: background 0.2s ease-in;
+}
+.beyond-slider > .beyond-slider-direction-navs > .beyond-slider-direction-prev:hover,
+.beyond-slider > .beyond-slider-direction-navs > .beyond-slider-direction-next:hover {
+  background: rgba(0, 0, 0, 0.8);
 }
 .beyond-slider > .beyond-slider-direction-navs > .beyond-slider-direction-prev {
   left: 0;

@@ -168,7 +168,8 @@ Slider.defaultProps = {
 	pauseOnAction : true,
 	directionNav :true,  
 	controlNav : true,
-	interval : 2
+	interval : 2,
+	height : 400
 }
 
 export default Slider
