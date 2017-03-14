@@ -1,6 +1,6 @@
 {
   "name": "beyond-slider",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "a react component for slider",
   "main": "lib/index.js",
   "style": "lib/index.css",

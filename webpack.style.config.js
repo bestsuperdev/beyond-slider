@@ -18,7 +18,7 @@ module.exports = {
         filename: "[name].css"
     },
     module: {
-        loaders: [
+        rules: [
             // { test : /\.css$/,  loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader')},
             // { test : /\.less$/, loader : ExtractTextPlugin.extract('style-loader','css-loader!postcss-loader!less-loader')},
             {test : /\.less$/, use : ExtractTextPlugin.extract({

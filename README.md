@@ -33,7 +33,7 @@ import Slider , {Item} from 'beyond-slider'
 | 名称        | 类型   |  默认值  |  说明  |
 | ----------- | ------ | ------ | ------ |
 |  width  | number/string |  -   |  设置 Slider 宽度  |
-|  height  | number/string |  -   |  设置 Slider 高度  |
+|  height  | number/string |  400   |  设置 Slider 高度  |
 |  interval  | number/string |  2  |  设置轮播的时间间隔,单位为秒  |
 |  autoPlay  | boolean |  true  |  是否开启自动轮播  |
 |  pauseOnAction  | boolean |  true  |  设置鼠标悬停时是否停止轮播  |
