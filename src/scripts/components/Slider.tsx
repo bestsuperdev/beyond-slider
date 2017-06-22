@@ -82,7 +82,6 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		return this.boxWidth
 	}	
 	resizeWith(){
-		// debugger
 		// this.handlerStopAutoSlide()
 		// clearTimeout(this.timer)
 		// this.timer = null
@@ -420,7 +419,6 @@ class Slider extends React.Component<SliderProps,SliderState> {
 
     isMobile(){
         let sUserAgent = navigator.userAgent.toLowerCase()  
-		// console.log(sUserAgent)
         let bIsIpad = sUserAgent.match(/ipad/i)?sUserAgent.match(/ipad/i).toLocaleString() == "ipad":false
         let bIsIphoneOs = sUserAgent.match(/iphone os/i)?sUserAgent.match(/iphone os/i).toLocaleString() == "iphone os":false
         let bIsMidp = sUserAgent.match(/midp/i)?sUserAgent.match(/midp/i).toLocaleString() == "midp":false  
