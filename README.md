@@ -22,7 +22,7 @@ import Slider , {Item} from 'beyond-slider'
 		<a href="http://www.baidu.com"> <img style={{width : '100%',height : '100%'}} src={require('images/c4.jpg')} /></a>
 	</Item>
 </Slider>
-
+11111111111111111111
 ```
 
 
