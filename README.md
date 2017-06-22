@@ -1,44 +1,63 @@
-﻿# beyond-slider
+## TypeScript Boilerplate
+这个脚手架项目专门为webpack+react开发单页应用定制，使用 TypeScript ，并采用less和postcss处理css。
 
-React 轮播组件
+(目前尚在开发中，请谨慎使用)
+ 
 
-## 用法
+### 开始
 
-```jsx
-require('beyond-slider/lib/index.css')
-import Slider , {Item} from 'beyond-slider'
+1. clone this repo
+2. cd into folder
+3. `npm install`
+4. `npm start` 启动开发服务器
+5. auto open http://yourIP:9000 (not localhost or 127.0.0.1 , for mobile test)
 
-<Slider  height={500}>
-	<Item key="0">
-		<a href="http://www.baidu.com"> <img style={{width : '100%',height : '100%'}} src={require('images/c1.jpg')} /></a>
-	</Item>
-	<Item key="1">
-		<a href="http://www.baidu.com"> <img style={{width : '100%',height : '100%'}} src={require('images/c2.jpg')} /></a>
-	</Item>
-	<Item key="2">
-		<a href="http://www.baidu.com"> <img style={{width : '100%',height : '100%'}} src={require('images/c3.jpg')} /></a>
-	</Item>
-	<Item key="3">
-		<a href="http://www.baidu.com"> <img style={{width : '100%',height : '100%'}} src={require('images/c4.jpg')} /></a>
-	</Item>
-</Slider>
-22222222222222222222
+
+### 内置部件
+webpack集成了对 typescript(tsx) 和 jsx语法和es2015的支持
+less 预处理
+postcss 后处理
+
+
+### 启动restful测试数据服务器
+`npm run mock` 启动测试数据服务器，数据配置在mock文件夹里，更详细的配置请参考[json-server文档](https://github.com/typicode/json-server)
+
+
+### 设置代理
+`npm start`启动的是webpack-dev-server服务器并进行开发，如果需要请求api进行开发测试，那么就会存在跨域的问题，因此需要设置webpack-dev-server的代理服务器，将webpack-dev-server服务器的一个path映射到api服务器。请更改server.js文件中的new WebpackDevServer 第二个参数的proxy属性，示例如下：
+```
+// `/api/*` 会映射 http://127.0.0.1:3000/api/* ，如 `/api/todos` 映射 http://127.0.0.1:3000/api/todos
+new WebpackDevServer(webpack(config), {
+  proxy : {
+    '/api/*' : {
+      target : 'http://127.0.0.1:3000'
+    }
+  }
+  
+})
+```
+已经内置集成了一个restful测试数据服务器json-server，通过`npm run mock`启动，并从webpack-dev-server指向该服务，通过 `http://yourIP:9000/api` 可以访问，[点击查看json-server文档](https://github.com/typicode/json-server)
+
+关于apiPath的另外一些tips，可以查看 [前后端分离下的前后端交互路径问题](https://github.com/mingzepeng/react-boilerplate/blob/master/doc/apiPath.md)
+
+
+### 图片和字体引入
+目前支持的图片引入为小于等于 30kb 的文件，会作为dataUrl编译在js或者css文件中，url返回dataUrl，超过该大小，会返回图片的url，css同理。
+```javascript
+var url = require('img.png')
+var img = new Image
+img.src = url
 ```
 
+支持css引入字体文件，编译的时候会自动处理路径。
 
-## API 
+### 编译打包
+会在dist文件中输出合并后的js，css，图片，字体等静态资源文件。
+```
+npm run deploy
+```
 
-**Slider**
+### 打包完成之后与后台整合
+在dist命令完成之后，会在dist文件夹中生成打包的文件，包括 index,js,css 以及图片字体等文件，请按照index.html的模板方式引入，head里面引入css文件，body底部引入js文件。
 
-| 名称        | 类型   |  默认值  |  说明  |
-| ----------- | ------ | ------ | ------ |
-|  width  | number/string |  -   |  设置 Slider 宽度  |
-|  height  | number/string |  400   |  设置 Slider 高度  |
-|  interval  | number/string |  2  |  设置轮播的时间间隔,单位为秒  |
-|  autoPlay  | boolean |  true  |  是否开启自动轮播  |
-|  pauseOnAction  | boolean |  true  |  设置鼠标悬停时是否停止轮播  |
-|  controlNav  | boolean |  true   |  显示 Slider 上的指示器  |
-|  directionNav  | boolean |  true   |  显示 Slider 上的方向指示器  |
-|  prev  | Element/string |  -   |  设置前指示器内容  |
-|  next  | Element/string |  -   |  设置后指示器内容  |
-|  extraClassName  | string |  -  |  增加一个 className, 用以覆盖原有样式  |
+建议项目默认打包后的静态资源文件都放在后台项目的bundles文件夹中（index.html可以不需要添加）
