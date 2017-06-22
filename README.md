@@ -38,3 +38,4 @@ import {Slider,Item} from './Slider'
 |  prev  | Element/string |  -   |  设置前指示器内容  |
 |  next  | Element/string |  -   |  设置后指示器内容  |
 |  extraClassName  | string |  -  |  增加一个 className, 用以覆盖原有样式  |
+|  mobile  | boolean |  false  |  在移动设备上能触摸切换  |
