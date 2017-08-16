@@ -446,8 +446,8 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		if(directionNav){
 			return (
 				<div className={`${prefix}-direction-navs`} >
-					<span href="#" className={`${prefix}-direction-prev`} onClick={this.handlerPrev.bind(this)}>{prev}</span>
-                    <span href="#" className={`${prefix}-direction-next`} onClick={this.handlerNext.bind(this)}>{next}</span>
+					<span className={`${prefix}-direction-prev`} onClick={this.handlerPrev.bind(this)}>{prev}</span>
+                    <span className={`${prefix}-direction-next`} onClick={this.handlerNext.bind(this)}>{next}</span>
 				</div>
 			)
 		}

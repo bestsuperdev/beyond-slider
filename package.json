@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@types/es6-shim": "^0.31.32",
-    "@types/react": "^0.14.50",
+    "@types/react": ">=0.14.0",
     "@types/react-dom": "^0.14.19",
     "@types/classnames": "^0.0.31",
     "beyond-lib": "^1.0.2",
@@ -19,9 +19,9 @@
     "es6-shim": "^0.35.2",
     "normalize.css": "^5.0.0",
     "react": "^15.0.0",
-    "react-dom": "^15.0.0",   
-     "jquery": "^1.11.0",
-     "classnames": "^2.2.3"
+    "react-dom": "^15.0.0",
+    "jquery": "^1.11.0",
+    "classnames": "^2.2.3"
   },
   "devDependencies": {
     "autoprefixer": "^6.1.1",
