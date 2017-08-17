@@ -57,7 +57,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
     }   
 	constructor(props:SliderProps){
 		super(props)
-		this.state = {curIndex: 0,prevIndex:0}
+		this.state = {curIndex: 0,prevIndex:0,Style:{}}
 		this.autoSlideHandle = null
 		this.handlerItemLeave = this.handlerItemLeave.bind(this) 
 		this.handlerItemEnter = this.handlerItemEnter.bind(this) 
@@ -77,9 +77,6 @@ class Slider extends React.Component<SliderProps,SliderState> {
 	getBoxWidth(){
 		let box = ReactDom.findDOMNode(this)
         this.boxWidth = box.clientWidth	
-
-		// console.log($(box))
-		return this.boxWidth
 	}	
 	resizeWith(){
 		// this.handlerStopAutoSlide()
@@ -89,7 +86,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		let {curIndex,prevIndex} =this.state
 		let finLeft = -(curIndex+1)*this.boxWidth
 		if(curIndex == 0){
-				finLeft = -(this.childrenLength+1)*this.boxWidth
+			finLeft = -(this.childrenLength+1)*this.boxWidth
 		}
 		this.quickMove1(finLeft,prevIndex,curIndex)	
         this.handlerAutoSlide()			
@@ -190,60 +187,31 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		}
 	}
 
-	handlerTranslateCSS(curIndex:number,nextIndex:number,direction:number,isClick:boolean){
-		//debugger
-        let left = 0
-        let finLeft = -(nextIndex+1)*this.boxWidth
-		if(!isClick){
-			if(nextIndex == 0 && direction == 1){
-				finLeft = -(this.childrenLength+1)*this.boxWidth
-			}else if(nextIndex == this.childrenLength -1  && direction == -1){
-				finLeft = 0
-			}
-		}
-        this.animate(curIndex,nextIndex,finLeft,0.3,direction,isClick)		
-	}
-
 	quickMove1(finLeft:number,prevIndex:number,curIndex:number){
 		let Style = this.setStyle((this.childrenLength+2)*this.boxWidth,finLeft,0)
 		this.setState({Style,prevIndex,curIndex})
 	}
 
-    animate(curIndex:number,nextIndex:number,finLeft:number,sliderTime:number,direction:number,isClick:boolean){//用样式来写动画
-        let OrigFinLeft = finLeft
+    animate(curIndex:number,nextIndex:number,sliderTime:number,direction:number,isClick:boolean){//用样式来写动画
+        let finLeft
         let Style,Style1
 		// if(curIndex == 0)debugger
-        let prevIndex = nextIndex
-		if(isClick){//index点击
-			if(curIndex == 0){
-				finLeft = -1*this.boxWidth
-				this.quickMove1(finLeft,prevIndex,nextIndex)		
-			}else if(curIndex == this.childrenLength -1){
-				finLeft = -this.childrenLength*this.boxWidth
-				this.quickMove1(finLeft,prevIndex,nextIndex)					
-			}
-		}else{//滑动
-			if(direction == 1){//右滑
-				// debugger
-				if(curIndex == 0 && nextIndex == 1){
-					// debugger//左,0
-					finLeft = -1*this.boxWidth
-					this.quickMove1(finLeft,prevIndex,nextIndex)	
-				}else if(curIndex == this.childrenLength -1){
-					finLeft = -this.childrenLength*this.boxWidth	
-					this.quickMove1(finLeft,prevIndex,nextIndex)													
-				}				
-			}else{//左滑
-				if(curIndex == this.childrenLength-1 && nextIndex == this.childrenLength-2){
-					// debugger//右，最后
-					finLeft = -this.childrenLength*this.boxWidth
-					this.quickMove1(finLeft,prevIndex,nextIndex)							
-				}else if(curIndex == 0){
-					finLeft = -this.boxWidth
-					this.quickMove1(finLeft,prevIndex,nextIndex)								
-				}
-			}
+		let prevIndex = nextIndex
+		if((isClick && curIndex == 0) ||((!isClick)&&((direction == 1 && curIndex == 0)||(direction == -1 && curIndex == 0)))){
+			finLeft = -1*this.boxWidth
+			this.quickMove1(finLeft,prevIndex,nextIndex)
+		}else if((isClick && curIndex == this.childrenLength -1) ||((!isClick)&&((direction == 1 && curIndex == this.childrenLength -1)||(direction == -1 && curIndex == this.childrenLength-1)))){
+			finLeft = -this.childrenLength*this.boxWidth
+			this.quickMove1(finLeft,prevIndex,nextIndex)
 		}
+        let OrigFinLeft = -(nextIndex+1)*this.boxWidth
+		if(!isClick){
+			if(curIndex == this.childrenLength-1 && nextIndex == 0 && direction == 1){
+				OrigFinLeft = -(this.childrenLength+1)*this.boxWidth
+			}else if(curIndex == 0 && nextIndex == this.childrenLength -1  && direction == -1){
+				OrigFinLeft = 0
+			}
+		}		
 		Style1 = this.setStyle((this.childrenLength+2)*this.boxWidth,OrigFinLeft,sliderTime)
 		// this.setState({Style:Style1,prevIndex,curIndex:nextIndex})		
 		this.timer = setTimeout(this.delayRender.bind(this),10,Style1,prevIndex,nextIndex) 
@@ -265,9 +233,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		if(this.props.mobile){
 			let direction = 1
 			if(curIndex < prevIndex) direction = -1
-			// console.log('上一个'+prevIndex)
-			// console.log('下一个'+curIndex)
-			this.handlerTranslateCSS(prevIndex,curIndex,direction,true)
+			this.animate(prevIndex,curIndex,0.3,direction,true)
 		}else{
 			this.setState({curIndex,prevIndex:curIndex})
 		}
@@ -279,7 +245,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
         let {prevIndex} = this.state
 		let curIndex = this.getPrev()
         if(this.props.mobile){
-			this.handlerTranslateCSS(prevIndex,curIndex,-1,false)
+			this.animate(prevIndex,curIndex,0.3,-1,false)
         }else{
             this.handlerChange(curIndex)         
         }      	
@@ -288,12 +254,10 @@ class Slider extends React.Component<SliderProps,SliderState> {
 	handlerNext(){
 		this.handlerStopAutoSlide()
         let {prevIndex} = this.state
-		// console.log('上一个'+prevIndex)
 		let curIndex = this.getNext()
         if(this.props.mobile){
-            this.handlerTranslateCSS(prevIndex,curIndex,1,false)
+            this.animate(prevIndex,curIndex,0.3,1,false)
         }else{
-			// debugger
             this.handlerChange(curIndex)      
         }
 	}
@@ -328,9 +292,6 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		let {width, height, extraClassName} = this.props
 		// console.log(width)
 		let style = {width,height}
-		// if(width){
-		// 	this.boxWidth = width
-		// }
 		let className = classnames(prefix,extraClassName)//onTouchStart={this.handlerTouchStart.bind(this)} onTouchMove={this.handlerTouchMove.bind(this)} 
 		return(
 			<div className={className}  style={style} >
@@ -339,16 +300,6 @@ class Slider extends React.Component<SliderProps,SliderState> {
 				{this.renderNavs()}
 			</div>
 		)
-	}
-	createItem1(item:any,key:string | number,index:number){
-		let itemUnit =React.cloneElement(item,{
-						key:key,
-						active: index == this.state.curIndex,
-						onMouseEnter : this.handlerItemEnter,
-						onMouseLeave : this.handlerItemLeave,
-						
-					})
-		return itemUnit
 	}
 	createItem(item:any,key:string | number,index:number){
 		let itemUnit =React.cloneElement(item,{
@@ -364,42 +315,32 @@ class Slider extends React.Component<SliderProps,SliderState> {
 	renderItems(){
 		// debugger
 		let {width} = this.props
-		let {curIndex} = this.state
+		let {curIndex,Style} = this.state
         let children = (Array.isArray(this.props.children) ? this.props.children : [this.props.children]).filter((child)=> child != null)
 		this.childrenLength = children.length
-		if(children){
-			// debugger
-			children = Array.isArray(children) ? children : [children]
-			if(this.props.mobile && this.boxWidth){
-				// debugger
-				let firstItem:any
-				let lastItem:any
-				let items = children.map((item:any,i:any)=>{
-					let itemUnit = this.createItem(item,i,i)
-					if(i == 0){
-						firstItem = this.createItem(item,-1,i)
-					}else if(i == children.length -1){
-						lastItem = this.createItem(item,this.childrenLength,i)
-					}
-					return itemUnit				
-				})
-				items.unshift(lastItem)
-				items.push(firstItem)          
-                let Style = this.state.Style
-				return <ul style={{
-					width:this.boxWidth*(this.childrenLength+2),
-					WebkitTransform:Style.transform,
-					transition:Style.transition
-				}} 
-				className={`${prefix}-items-mobile`}>{items}</ul>
-			}else{
-			// debugger
-				let items = children.map((item:any,i:any)=>{
-					return this.createItem1(item,i,i)
-				})				
-				return <ul className={`${prefix}-items`}>{items}</ul>
-			}		
-		}
+		if(children && this.props.mobile && this.boxWidth){
+			let items:any[] = []
+			children.map((item:any,i:any)=>{
+				let itemUnit = this.createItem(item,i,i)
+				items.push(itemUnit)
+				if(i == 0){
+					items.unshift(this.createItem(item,-1,i))
+				}else if(i == children.length -1){
+					items.push(this.createItem(item,this.childrenLength,i))
+				}
+			})
+			return <ul style={{ width:this.boxWidth*(this.childrenLength+2),
+								WebkitTransform:Style && Style.transform,
+								transition:Style.transition
+								}} 
+						className={`${prefix}-items-mobile`}>{items}</ul>
+		}else{
+		// debugger
+			let items = children.map((item:any,i:any)=>{
+				return this.createItem(item,i,i)
+			})				
+			return <ul className={`${prefix}-items`}>{items}</ul>
+		}		
 	}
 
 	renderIndex(){		
@@ -454,6 +395,4 @@ class Slider extends React.Component<SliderProps,SliderState> {
 
 	}
 }
-
-
 export {Slider,Item}
