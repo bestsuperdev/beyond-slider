@@ -194,7 +194,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 
     animate(curIndex:number,nextIndex:number,sliderTime:number,direction:number,isClick:boolean){//用样式来写动画
         let finLeft
-        let Style,Style1
+        let Style
 		// if(curIndex == 0)debugger
 		let prevIndex = nextIndex
 		if((isClick && curIndex == 0) ||((!isClick)&&((direction == 1 && curIndex == 0)||(direction == -1 && curIndex == 0)))){
@@ -202,6 +202,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 			this.quickMove1(finLeft,prevIndex,nextIndex)
 		}else if((isClick && curIndex == this.childrenLength -1) ||((!isClick)&&((direction == 1 && curIndex == this.childrenLength -1)||(direction == -1 && curIndex == this.childrenLength-1)))){
 			finLeft = -this.childrenLength*this.boxWidth
+			// debugger
 			this.quickMove1(finLeft,prevIndex,nextIndex)
 		}
         let OrigFinLeft = -(nextIndex+1)*this.boxWidth
@@ -212,13 +213,14 @@ class Slider extends React.Component<SliderProps,SliderState> {
 				OrigFinLeft = 0
 			}
 		}		
-		Style1 = this.setStyle((this.childrenLength+2)*this.boxWidth,OrigFinLeft,sliderTime)
+		Style = this.setStyle((this.childrenLength+2)*this.boxWidth,OrigFinLeft,sliderTime)
 		// this.setState({Style:Style1,prevIndex,curIndex:nextIndex})		
-		this.timer = setTimeout(this.delayRender.bind(this),10,Style1,prevIndex,nextIndex) 
+		this.timer = setTimeout(this.delayRender.bind(this),10,Style,prevIndex,nextIndex) 
 		   
     }
 
     delayRender(Style:CSSStyle,prevIndex:number,nextIndex:number){
+		// debugger
 		if(this.timer != null){
 			this.setState({Style,prevIndex,curIndex:nextIndex})
 			clearInterval(this.timer)
@@ -279,7 +281,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 			let disX = event.changedTouches[0].pageX -this.touchStartCoordX
 			let disY = event.changedTouches[0].pageY -this.touchStartCoordY
 			if(Math.abs(disX) > Math.abs(disY)){
-				if(disX >0){	
+				if(disX > 0){	
 					this.handlerPrev()	//向右滑			
 				}else {	
 					this.handlerNext()	//向左滑
@@ -320,13 +322,15 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		this.childrenLength = children.length
 		if(children && this.props.mobile && this.boxWidth){
 			let items:any[] = []
+			let firstItem:any
 			children.map((item:any,i:any)=>{
 				let itemUnit = this.createItem(item,i,i)
 				items.push(itemUnit)
-				if(i == 0){
+				if(i == children.length -1){
 					items.unshift(this.createItem(item,-1,i))
-				}else if(i == children.length -1){
-					items.push(this.createItem(item,this.childrenLength,i))
+					items.push(firstItem)
+				}else if(i == 0){
+					firstItem = this.createItem(item,this.childrenLength,i)
 				}
 			})
 			return <ul style={{ width:this.boxWidth*(this.childrenLength+2),
