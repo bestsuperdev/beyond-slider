@@ -11,7 +11,7 @@
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import * as classnames from 'classnames'
-var $ = require('jquery')
+// var $ = require('jquery')
 const prefix = 'beyond-slider'
 const Item = (props:any)=> {
 	return <li style={{width:props.Width}} onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave} className={classnames(props.active && `${prefix}-fadeIn`)}>{props.children}</li>//className={classnames(props.active && `${prefix}-fadeIn`)}
