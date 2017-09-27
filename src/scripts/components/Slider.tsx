@@ -129,6 +129,10 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		 if(this.props.autoPlay){
 			// this.mountFlag = true
 			this.getBoxWidth()
+			let OrigFinLeft = -(1)*this.boxWidth
+			let Style = this.setStyle((this.childrenLength+2)*this.boxWidth,OrigFinLeft,0)
+			this.setState({Style})
+			this.handlerStopAutoSlide()
             this.handlerAutoSlide()
 			
         }
@@ -140,7 +144,6 @@ class Slider extends React.Component<SliderProps,SliderState> {
 	}
 
 	componentDidUpdate(){
-		this.getBoxWidth()	
 		if(this.childrenLength == 1){
 			this.handlerStopAutoSlide()
 			return
@@ -315,12 +318,11 @@ class Slider extends React.Component<SliderProps,SliderState> {
 	}
 
 	renderItems(){
-		// debugger
 		let {width} = this.props
 		let {curIndex,Style} = this.state
         let children = (Array.isArray(this.props.children) ? this.props.children : [this.props.children]).filter((child)=> child != null)
 		this.childrenLength = children.length
-		if(children && this.props.mobile && this.boxWidth){
+		if(this.props.mobile&& this.boxWidth){
 			let items:any[] = []
 			let firstItem:any
 			children.map((item:any,i:any)=>{
@@ -338,13 +340,12 @@ class Slider extends React.Component<SliderProps,SliderState> {
 								transition:Style.transition
 								}} 
 						className={`${prefix}-items-mobile`}>{items}</ul>
-		}else{
-		// debugger
+		}else if(!this.props.mobile){
 			let items = children.map((item:any,i:any)=>{
 				return this.createItem(item,i,i)
 			})				
 			return <ul className={`${prefix}-items`}>{items}</ul>
-		}		
+		}				
 	}
 
 	renderIndex(){		
