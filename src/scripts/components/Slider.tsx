@@ -126,12 +126,14 @@ class Slider extends React.Component<SliderProps,SliderState> {
 			this.handlerStopAutoSlide()
 			return
 		}
-		 if(this.props.autoPlay){
-			// this.mountFlag = true
+		if(this.props.mobile){
 			this.getBoxWidth()
 			let OrigFinLeft = -(1)*this.boxWidth
 			let Style = this.setStyle((this.childrenLength+2)*this.boxWidth,OrigFinLeft,0)
-			this.setState({Style})
+			this.setState({Style})			
+		}
+		 if(this.props.autoPlay){
+			// this.mountFlag = true
 			this.handlerStopAutoSlide()
             this.handlerAutoSlide()
 			
@@ -322,7 +324,8 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		let {curIndex,Style} = this.state
         let children = (Array.isArray(this.props.children) ? this.props.children : [this.props.children]).filter((child)=> child != null)
 		this.childrenLength = children.length
-		if(this.props.mobile&& this.boxWidth){
+		if(this.props.mobile && this.boxWidth){
+			// debugger
 			let items:any[] = []
 			let firstItem:any
 			children.map((item:any,i:any)=>{
@@ -341,6 +344,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 								}} 
 						className={`${prefix}-items-mobile`}>{items}</ul>
 		}else if(!this.props.mobile){
+			// debugger
 			let items = children.map((item:any,i:any)=>{
 				return this.createItem(item,i,i)
 			})				
