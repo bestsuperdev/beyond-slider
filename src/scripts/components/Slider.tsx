@@ -64,6 +64,9 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		this.childrenLength = 0
 		this.timer = null
 		this.mountFlag = false
+		this.resizeWith = this.resizeWith.bind(this)
+		this.handlerTouchStart = this.handlerTouchStart.bind(this)
+		this.handlerTouchMove = this.handlerTouchMove.bind(this)
 	}
     public autoSlideHandle:any
 	public touchStartCoordX:any
@@ -139,10 +142,10 @@ class Slider extends React.Component<SliderProps,SliderState> {
 			
         }
 		if(this.props.mobile && !this.props.width)		
-			window.addEventListener('resize',this.resizeWith.bind(this))
+			window.addEventListener('resize',this.resizeWith)
 		let box = ReactDom.findDOMNode(this)
-		box.addEventListener('touchstart',this.handlerTouchStart.bind(this))
-		box.addEventListener('touchmove',this.handlerTouchMove.bind(this))
+		box.addEventListener('touchstart',this.handlerTouchStart)
+		box.addEventListener('touchmove',this.handlerTouchMove)
 	}
 
 	componentDidUpdate(){
@@ -160,10 +163,10 @@ class Slider extends React.Component<SliderProps,SliderState> {
 	componentWillUnmount(){
 		this.handlerStopAutoSlide()
 		if(this.props.mobile && !this.props.width)
-			window.removeEventListener('resize',this.resizeWith.bind(this))
+			window.removeEventListener('resize',this.resizeWith)
 		let box = ReactDom.findDOMNode(this)
-		box.removeEventListener('touchstart',this.handlerTouchStart.bind(this))
-		box.removeEventListener('touchmove',this.handlerTouchMove.bind(this))		
+		box.removeEventListener('touchstart',this.handlerTouchStart)
+		box.removeEventListener('touchmove',this.handlerTouchMove)		
 	}
 
 	handlerStopAutoSlide(){
