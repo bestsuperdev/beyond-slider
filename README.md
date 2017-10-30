@@ -6,7 +6,10 @@ React 轮播组件/移动设备可滑动切换
 ```
 $ npm install --save beyond-slider
 ```
+## 文档
+
 ### slider
+
 #### 基本用法（图片轮播）
 
 ```jsx
