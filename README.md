@@ -2,24 +2,54 @@
 
 React 轮播组件/移动设备可滑动切换
 
-## 用法
-
-```tsx
-import {Slider,Item} from './Slider'
-<Slider mobile width={500} height={300} interval={2} autoPlay pauseOnAction controlNav directionNav>
-  <Item key="0"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c1.jpg')} /></a></Item>
-  <Item key="1"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c2.jpg')} /></a></Item>
-  <Item key="2"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c3.jpg')} /></a></Item>
-  <Item key="3"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c4.jpg')} /></a></Item>	
-</Slider>
-    
-<Slider  height={300} interval={4} autoPlay={true} pauseOnAction={true} controlNav={true} directionNav={true} prev={(<i>向前</i>)}>
-  <Item key="0"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c1.jpg')} /></a></Item>
-  <Item key="1"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c2.jpg')} /></a></Item>
-  <Item key="2"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c3.jpg')} /></a></Item>
-  <Item key="3"><a href="http://www.baidu.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c4.jpg')} /></a></Item>
-</Slider>	
+## 安装
 ```
+$ npm install --save beyond-slider
+```
+### slider
+#### 基本用法（图片轮播）
+
+```jsx
+require('beyond-slider/lib/index.css')
+import React, { Component } from 'react';
+import Slider , {Item} from 'beyond-slider'
+class myComponent extends Component{
+  render(){
+    return(
+          <Slider mobile width={500} height={300} interval={2} autoPlay pauseOnAction controlNav directionNav>
+            <Item key="0"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c1.jpg')} /></a></Item>
+            <Item key="1"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c2.jpg')} /></a></Item>
+            <Item key="2"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c3.jpg')} /></a></Item>
+            <Item key="3"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c4.jpg')} /></a></Item>	
+          </Slider>
+
+    )
+  }
+}
+
+```
+#### 基本用法（图片切换效果为渐变效果）
+
+```jsx
+require('beyond-slider/lib/index.css')
+import React, { Component } from 'react';
+import Slider , {Item} from 'beyond-slider'
+class myComponent extends Component{
+  render(){
+    return(
+          <Slider gradient height={300} interval={4} autoPlay={true} pauseOnAction={true} controlNav={true} directionNav={true} prev={(<i>向前</i>)}>
+            <Item key="0"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c1.jpg')} /></a></Item>
+            <Item key="1"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c2.jpg')} /></a></Item>
+            <Item key="2"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c3.jpg')} /></a></Item>
+            <Item key="3"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c4.jpg')} /></a></Item>
+          </Slider>	
+
+    )
+  }
+}
+
+```
+              
 
 
 ## API 
@@ -38,4 +68,4 @@ import {Slider,Item} from './Slider'
 |  prev  | Element/string |  -   |  设置前指示器内容  |
 |  next  | Element/string |  -   |  设置后指示器内容  |
 |  extraClassName  | string |  -  |  增加一个 className, 用以覆盖原有样式  |
-|  mobile  | boolean |  false  |  在移动设备上能触摸切换  |
+|  gradient  | boolean |  false  |  图片切换效果是否为渐变效果  |

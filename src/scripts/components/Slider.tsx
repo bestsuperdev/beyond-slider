@@ -28,7 +28,8 @@ interface SliderProps{
     prev?:string | JSX.Element,
     next?:string | JSX.Element,
 
-	mobile?:boolean
+	// mobile?:boolean,
+	gradient?:boolean
 }
 interface CSSStyle{
     width?:number,
@@ -53,7 +54,9 @@ class Slider extends React.Component<SliderProps,SliderState> {
         directionNav :true,  
         controlNav : true,
         interval : 2,
-        height : 400
+		height : 400,
+		gradient:false,
+		mobile:false
     }   
 	constructor(props:SliderProps){
 		super(props)
@@ -129,7 +132,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 			this.handlerStopAutoSlide()
 			return
 		}
-		if(this.props.mobile){
+		if(!this.props.gradient){
 			this.getBoxWidth()
 			let OrigFinLeft = -(1)*this.boxWidth
 			let Style = this.setStyle((this.childrenLength+2)*this.boxWidth,OrigFinLeft,0)
@@ -141,7 +144,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
             this.handlerAutoSlide()
 			
         }
-		if(this.props.mobile && !this.props.width)		
+		if(!this.props.gradient && !this.props.width)		
 			window.addEventListener('resize',this.resizeWith)
 		let box = ReactDom.findDOMNode(this)
 		box.addEventListener('touchstart',this.handlerTouchStart)
@@ -162,7 +165,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 
 	componentWillUnmount(){
 		this.handlerStopAutoSlide()
-		if(this.props.mobile && !this.props.width)
+		if(!this.props.gradient && !this.props.width)
 			window.removeEventListener('resize',this.resizeWith)
 		let box = ReactDom.findDOMNode(this)
 		box.removeEventListener('touchstart',this.handlerTouchStart)
@@ -240,7 +243,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
         // debugger
         this.handlerStopAutoSlide()
         if( prevIndex!= undefined && prevIndex == curIndex) return 
-		if(this.props.mobile){
+		if(!this.props.gradient){
 			let direction = 1
 			if(curIndex < prevIndex) direction = -1
 			this.animate(prevIndex,curIndex,0.3,direction,true)
@@ -254,7 +257,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		this.handlerStopAutoSlide()
         let {prevIndex} = this.state
 		let curIndex = this.getPrev()
-        if(this.props.mobile){
+        if(!this.props.gradient){
 			this.animate(prevIndex,curIndex,0.3,-1,false)
         }else{
             this.handlerChange(curIndex)         
@@ -265,7 +268,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		this.handlerStopAutoSlide()
         let {prevIndex} = this.state
 		let curIndex = this.getNext()
-        if(this.props.mobile){
+        if(!this.props.gradient){
             this.animate(prevIndex,curIndex,0.3,1,false)
         }else{
             this.handlerChange(curIndex)      
@@ -327,7 +330,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 		let {curIndex,Style} = this.state
         let children = (Array.isArray(this.props.children) ? this.props.children : [this.props.children]).filter((child)=> child != null)
 		this.childrenLength = children.length
-		if(this.props.mobile && this.boxWidth){
+		if(!this.props.gradient && this.boxWidth){
 			// debugger
 			let items:any[] = []
 			let firstItem:any
@@ -346,7 +349,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 								transition:Style.transition
 								}} 
 						className={`${prefix}-items-mobile`}>{items}</ul>
-		}else if(!this.props.mobile){
+		}else if(this.props.gradient){
 			// debugger
 			let items = children.map((item:any,i:any)=>{
 				return this.createItem(item,i,i)
