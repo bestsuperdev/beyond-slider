@@ -56,7 +56,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
         interval : 2,
 		height : 400,
 		gradient:false,
-		mobile:false
+		// mobile:false
     }   
 	constructor(props:SliderProps){
 		super(props)
