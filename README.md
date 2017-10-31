@@ -8,7 +8,7 @@ $ npm install --save beyond-slider
 ```
 ## 文档
 
-### slider
+### Slider
 
 #### 基本用法（图片轮播）
 
