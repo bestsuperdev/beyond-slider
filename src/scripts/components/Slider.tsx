@@ -27,8 +27,6 @@ interface SliderProps{
     height ?: number,
     prev?:string | JSX.Element,
     next?:string | JSX.Element,
-
-	// mobile?:boolean,
 	gradient?:boolean
 }
 interface CSSStyle{
@@ -56,7 +54,6 @@ class Slider extends React.Component<SliderProps,SliderState> {
         interval : 2,
 		height : 400,
 		gradient:false,
-		// mobile:false
     }   
 	constructor(props:SliderProps){
 		super(props)
@@ -348,7 +345,7 @@ class Slider extends React.Component<SliderProps,SliderState> {
 								WebkitTransform:Style && Style.transform,
 								transition:Style.transition
 								}} 
-						className={`${prefix}-items-mobile`}>{items}</ul>
+						className={`${prefix}-items-gradient`}>{items}</ul>
 		}else if(this.props.gradient){
 			// debugger
 			let items = children.map((item:any,i:any)=>{

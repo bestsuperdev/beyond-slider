@@ -19,7 +19,7 @@ import Slider , {Item} from 'beyond-slider'
 class myComponent extends Component{
   render(){
     return(
-          <Slider mobile width={500} height={300} interval={2} autoPlay pauseOnAction controlNav directionNav>
+          <Slider width={500} height={300} interval={2} autoPlay pauseOnAction controlNav directionNav>
             <Item key="0"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c1.jpg')} /></a></Item>
             <Item key="1"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c2.jpg')} /></a></Item>
             <Item key="2"><a href="http://www.800best.com"> <img style={{width:'100%',height : '100%'}} src={require('images/c3.jpg')} /></a></Item>
