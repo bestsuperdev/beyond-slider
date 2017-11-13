@@ -55,7 +55,7 @@ class myComponent extends Component{
               
 
 
-## API 
+#### API 
 
 **Slider**
 
